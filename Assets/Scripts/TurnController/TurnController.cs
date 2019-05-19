@@ -8,8 +8,9 @@ public delegate void ActiceCharactersChangedDelegate(List<GameObject> newCharact
 
 public class TurnController {
 
-	private Dictionary<int, List<GameObject>> teams;
-	private Dictionary<string, int> teamIDs;
+    //private Dictionary<int, List<GameObject>> teams;
+    private List<List<GameObject>> teams;
+	//private Dictionary<string, int> teamIDs;
 
 	private static TurnController instance;
 
@@ -59,8 +60,8 @@ public class TurnController {
 
     private TurnController()
 	{
-		teams = new Dictionary<int, List<GameObject>>();
-		teamIDs = new Dictionary<string, int>();
+		teams = new List<List<GameObject>>();
+		//teamIDs = new Dictionary<string, int>();
 	}
 
 	private void AddCharacter(GameObject character)
@@ -71,36 +72,50 @@ public class TurnController {
 			Debug.LogError("All characters you register must have a subclass of TurnBehavior on it!");
 		}
 		string team = behavior.GetTeam();
-		if (teamIDs.ContainsKey(team))
-		{
-			teams[teamIDs[team]].Add(character);
-		}
-		else
-		{
-			if (teams.Count == 0)
-			{
-				CurrentCharacter = character;
-				Debug.Log("First player is set");
-			}
-			int newTeamID = teamIDs.Count;
-			teamIDs.Add(team, newTeamID);
-			List<GameObject> newList = new List<GameObject>();
-			newList.Add(character);
-			teams.Add(newTeamID, newList);
-		}
+
+        bool newTeam = true;
+        foreach(var teamList in teams)
+        {
+            if(teamList[0].GetComponent<TurnBehavior>().team == team)
+            {
+                teamList.Add(character);
+                newTeam = false;
+            }
+        }
+        if (newTeam)
+        {
+            var newList = new List<GameObject>();
+            newList.Add(character);
+            if(teams.Count == 0)
+            {
+                CurrentCharacter = character;
+            }
+            teams.Add(newList);
+
+        }
 	}
 
 	private void RemoveCharacter(GameObject character)
 	{
 		string team = character.GetComponent<TurnBehavior>().GetTeam();
-		int teamID = teamIDs[team];
-		List<GameObject> teamMembers = teams[teamID];
-		teamMembers.Remove(character);
-		if(teamMembers.Count == 0)
-		{
-			teams.Remove(teamID);
-			teamIDs.Remove(team);
-		}
+        //int teamID = teamIDs[team];
+        List<GameObject> emptyTeam = null;
+        foreach(var teamList in teams)
+        {
+            if(teamList[0].GetComponent<TurnBehavior>().team == team)
+            {
+                teamList.Remove(character);
+                if (teamList.Count == 0)
+                {
+                    emptyTeam = teamList;
+                }
+                break;
+            }
+        }
+        if (emptyTeam != null)
+        {
+            teams.Remove(emptyTeam);
+        }
 	}
 
 	public static TurnController GetInstance()
@@ -127,18 +142,14 @@ public class TurnController {
 	{
         List<GameObject> team = teams[currentTeamID];
 		currentTeamMemberID++;
-		if (currentTeamMemberID > teams[currentTeamID].Count - 1)
+		if (currentTeamMemberID >= teams[currentTeamID].Count)
 		{
             currentTeamMemberID = 0;
-            do
+            currentTeamID++;
+            if (currentTeamID >= teams.Count)
             {
-                currentTeamID++;
-                if (currentTeamID >= teams.Count - 1)
-                {
-                    currentTeamID = 0;
-                }
+                currentTeamID = 0;
             }
-            while (!teams.TryGetValue(currentTeamID, out team));
 		}
 		CurrentCharacter = team[currentTeamMemberID];
 	}
@@ -146,7 +157,7 @@ public class TurnController {
     public List<GameObject> GetActiveCharacters()
 	{
 		List<GameObject> re = new List<GameObject>();
-		foreach(List<GameObject> team in teams.Values)
+		foreach(List<GameObject> team in teams)
 		{
 			re.AddRange(team);
 		}
