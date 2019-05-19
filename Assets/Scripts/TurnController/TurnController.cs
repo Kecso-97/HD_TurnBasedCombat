@@ -8,10 +8,8 @@ public delegate void ActiceCharactersChangedDelegate(List<GameObject> newCharact
 
 public class TurnController {
 
-    //private Dictionary<int, List<GameObject>> teams;
     private List<List<GameObject>> teams;
-	//private Dictionary<string, int> teamIDs;
-
+	
 	private static TurnController instance;
 
 	public int currentTeamMemberID;
@@ -61,7 +59,6 @@ public class TurnController {
     private TurnController()
 	{
 		teams = new List<List<GameObject>>();
-		//teamIDs = new Dictionary<string, int>();
 	}
 
 	private void AddCharacter(GameObject character)
@@ -98,7 +95,6 @@ public class TurnController {
 	private void RemoveCharacter(GameObject character)
 	{
 		string team = character.GetComponent<TurnBehavior>().GetTeam();
-        //int teamID = teamIDs[team];
         List<GameObject> emptyTeam = null;
         foreach(var teamList in teams)
         {
