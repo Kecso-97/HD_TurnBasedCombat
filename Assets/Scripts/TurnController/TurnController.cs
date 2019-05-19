@@ -125,20 +125,22 @@ public class TurnController {
     
 	public void IncrementTurnVariables()
 	{
+        List<GameObject> team = teams[currentTeamID];
 		currentTeamMemberID++;
 		if (currentTeamMemberID > teams[currentTeamID].Count - 1)
 		{
-			currentTeamMemberID = 0;
-			if (currentTeamID >= teams.Count - 1)
-			{
-				currentTeamID = 0;
-			}
-			else
-			{
-				currentTeamID++;
-			}
+            currentTeamMemberID = 0;
+            do
+            {
+                currentTeamID++;
+                if (currentTeamID >= teams.Count - 1)
+                {
+                    currentTeamID = 0;
+                }
+            }
+            while (!teams.TryGetValue(currentTeamID, out team));
 		}
-		CurrentCharacter = teams[currentTeamID][currentTeamMemberID];
+		CurrentCharacter = team[currentTeamMemberID];
 	}
 
     public List<GameObject> GetActiveCharacters()

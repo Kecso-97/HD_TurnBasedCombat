@@ -135,4 +135,5 @@ public abstract class TurnBehavior : MonoBehaviour
     public abstract void UseSkill(int skillIndex);
 
     public abstract void SetTarget(Vector3 target);
+
 }

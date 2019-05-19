@@ -80,18 +80,21 @@ public class CharacterStats : MonoBehaviour
             {
                 movementCount = maxMovementCount;
             }
+            events.OnStatsChanged(this);
         }
     }
 
     private void Die()
     {
         Debug.Log(name + " died");
+        Destroy(gameObject);
     }
 
     public void Reload()
     {
-        movementCount = maxMovementCount;
-        mana = maxMana;
+        MovementCount = maxMovementCount;
+        Mana = maxMana;
+        Debug.Log("Stats reloaded!");
     }
 
 

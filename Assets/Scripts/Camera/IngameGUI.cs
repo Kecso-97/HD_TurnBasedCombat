@@ -60,12 +60,12 @@ public class IngameGUI : MonoBehaviour
         displayedStats = characterStats;
         DetailedStatsWindow.transform.Find("Character display").gameObject.GetComponent<Image>().sprite = characterStats.fullDisplay;
 
-        DetailedStatsWindow.GetComponentInChildren<Text>().text = "Stats:\n - Health: " + characterStats.Health + "/" + characterStats.maxHealth + "\n - Mana: " + characterStats.Mana + "/" + characterStats.maxMana; 
+        DetailedStatsWindow.GetComponentInChildren<Text>().text = "Stats:\n - Health: " + characterStats.Health + "/" + characterStats.maxHealth + "\n - Mana: " + characterStats.Mana + "/" + characterStats.maxMana + "\n - Movement: " + characterStats.MovementCount + "/" + characterStats.maxMovementCount; 
     }
 
     public void UpdateDetailesWindow(CharacterStats subject)
     {
-        if(displayedStats != null) DetailedStatsWindow.GetComponentInChildren<Text>().text = "Stats:\n - Health: " + displayedStats.Health + "/" + displayedStats.maxHealth + "\n - Mana: " + displayedStats.Mana + "/" + displayedStats.maxMana;
+        if(displayedStats != null) DetailedStatsWindow.GetComponentInChildren<Text>().text = "Stats:\n - Health: " + displayedStats.Health + "/" + displayedStats.maxHealth + "\n - Mana: " + displayedStats.Mana + "/" + displayedStats.maxMana + "\n - Movement: " + displayedStats.MovementCount + "/" + displayedStats.maxMovementCount;
     }
 
     public void EndTurnAttempt()
