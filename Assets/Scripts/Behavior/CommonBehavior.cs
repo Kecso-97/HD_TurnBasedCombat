@@ -78,7 +78,7 @@ public class CommonBehavior : TurnBehavior
         Debug.Log("Mana: " + Mana + ", Move: " + RemainingMoveCount);
 
         bool hasEnoughMana = false;
-        for(int i = 0; i < skills.Capacity; i++)
+        for(int i = 0; i < skills.Count; i++)
         {
             if (skills[i].HasEnoughMana())
             {
